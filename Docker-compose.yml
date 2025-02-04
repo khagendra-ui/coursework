@@ -1,0 +1,17 @@
+version: '3'
+services:
+  backend:
+    build: ./circular-fashion-backend  # Path to your backend folder
+    ports:
+      - "5001:5001"  # Update port to 5001
+    volumes:
+      - ./circular-fashion-backend:/app
+    environment:
+      - NODE_ENV=development
+  frontend:
+    build: ./circular-fashion-frontend  # Path to your frontend folder
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./circular-fashion-frontend:/app
+    command: "npm start"
