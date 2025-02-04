@@ -1,17 +1,18 @@
 version: '3'
 services:
   backend:
-    build: ./circular-fashion-backend  # Path to your backend folder
+    build: .  # Use the current folder for backend
     ports:
-      - "5001:5001"  # Update port to 5001
+      - "5001:5001"  # Map port 5001 for backend
     volumes:
-      - ./circular-fashion-backend:/app
+      - .:/app  # Mount the current folder as volume
     environment:
       - NODE_ENV=development
+
   frontend:
-    build: ./circular-fashion-frontend  # Path to your frontend folder
+    build: .  # Use the current folder for frontend
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Map port 3000 for frontend
     volumes:
-      - ./circular-fashion-frontend:/app
+      - .:/app  # Mount the current folder as volume
     command: "npm start"
