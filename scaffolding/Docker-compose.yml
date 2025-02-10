@@ -1,0 +1,18 @@
+version: '3'
+services:
+  backend:
+    build: .  # Use the current folder for backend
+    ports:
+      - "5001:5001"  # Map port 5001 for backend
+    volumes:
+      - .:/app  # Mount the current folder as volume
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    build: .  # Use the current folder for frontend
+    ports:
+      - "3000:3000"  # Map port 3000 for frontend
+    volumes:
+      - .:/app  # Mount the current folder as volume
+    command: "npm start"
