@@ -1,18 +1,56 @@
-version: '3'
+version: '3.8'  # ✅ Remove 'version' if you get warnings about it being obsolete
+
 services:
   backend:
-    build: .  # Use the current folder for backend
+    build:
+      context: ./backend  # ✅ Ensure this matches your actual backend folder
+      dockerfile: Dockerfile
     ports:
-      - "5001:5001"  # Map port 5001 for backend
-    volumes:
-      - .:/app  # Mount the current folder as volume
+      - "5001:5001"
+    depends_on:
+      - mysql
     environment:
-      - NODE_ENV=development
+      - DATABASE_HOST=mysql
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=yourpassword
+      - DATABASE_NAME=yourdbname
+    volumes:
+      - ./backend:/app  # Mount backend code for live updates
+    restart: always
 
   frontend:
-    build: .  # Use the current folder for frontend
+    build:
+      context: ./Frontened  # ✅ Ensure this matches your frontend folder name
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Map port 3000 for frontend
+      - "3000:3000"
+    depends_on:
+      - backend
     volumes:
-      - .:/app  # Mount the current folder as volume
-    command: "npm start"
+      - ./Frontened:/app  # Mount frontend code for live updates
+    restart: always
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: yourdbname
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=yourpassword
+
+volumes:
+  mysql_data:
